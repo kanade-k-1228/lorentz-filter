@@ -45,6 +45,6 @@ function loop() {
   //
 
   cv.imshow("canvasOutput", dst);
-  setTimeout(processVideo, 1000 / FPS - (Date.now() - startTime));
+  setTimeout(loop, 1000 / FPS - (Date.now() - startTime));
   return;
 }
