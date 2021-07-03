@@ -1,4 +1,4 @@
-const player = document.getElementById("videoInput");
+const camera = document.getElementById("videoInput");
 let isCvLoaded = false;
 
 function onOpenCvReady() {
@@ -22,14 +22,31 @@ navigator.mediaDevices
     video: true,
   })
   .then((stream) => {
-    player.srcObject = stream;
-    player.addEventListener(
+    camera.srcObject = stream;
+    camera.addEventListener(
       "canplay",
       () => {
-        player.width = player.videoWidth;
-        player.height = player.videoHeight;
+        camera.width = camera.videoWidth;
+        camera.height = camera.videoHeight;
         setTimeout(entry, 100);
       },
       false
     );
   });
+
+function entry() {
+  if (!isCvLoaded) {
+    setTimeout(entry, 100);
+    return;
+  }
+  init();
+  first();
+  loopWrap(30);
+  return;
+}
+
+function loopWrap(fps) {
+  let startTime = Date.now();
+  loop();
+  setTimeout(loopWrap, 1000 / fps - (Date.now() - startTime));
+}

@@ -1,24 +1,13 @@
-const FPS = 30;
 let cap, src, dst, vslit, hslit;
-let startTime;
-
-function entry() {
-  if (!isCvLoaded) {
-    setTimeout(entry, 100);
-    return;
-  }
-  cap = new cv.VideoCapture(player);
-  init();
-  first();
-  loop();
-  return;
-}
+let imgs;
 
 function init() {
-  src = new cv.Mat(player.height, player.width, cv.CV_8UC4);
+  cap = new cv.VideoCapture(camera);
+  src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4);
   dst = new cv.Mat();
-  vslit = new cv.Rect(0, 0, 10, player.height);
-  hslit = new cv.Rect(0, 0, player.width, 10);
+  vslit = new cv.Rect(0, 0, 1, camera.height);
+  hslit = new cv.Rect(0, 0, camera.width, 1);
+  imgs = new cv.MatVector();
 }
 
 function first() {
@@ -30,21 +19,9 @@ function loop() {
   startTime = Date.now();
   cap.read(src);
 
-  // Main
-  // cv.vconcat((dst, src.roi(rect)), dst);
-  // 画像をマスクしてアルファブレンド
-  // masks.forEach((mask, i) => {
-  //   cv.addWeighted(dst, 1, cv.bitwise_and(past[past.length - 1 - i], mask), 1, 0, dst);
-  // });
-  let imgs = new cv.MatVector();
-  imgs.push_back(dst);
-  imgs.push_back(src.roi(vslit));
+  imgs.push_back(src.roi(vslit).clone());
   cv.hconcat(imgs, dst);
-  // cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-  // cv.vconcat((dst, src), dst);
-  //
 
   cv.imshow("canvasOutput", dst);
-  setTimeout(loop, 1000 / FPS - (Date.now() - startTime));
   return;
 }
