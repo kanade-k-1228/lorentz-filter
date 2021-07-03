@@ -5,7 +5,7 @@ let imgs;
 
 function init() {
   // メモリ確保
-  cap = new cv.VideoCapture(videoElement); // ストリーム
+  cap = new cv.VideoCapture(camera); // ストリーム
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
   vslit = new cv.Rect(Math.floor(camera.width / 2), 0, 1, camera.height); // 縦長のスリット
