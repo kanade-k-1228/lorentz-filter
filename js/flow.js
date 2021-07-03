@@ -6,7 +6,6 @@ function entry() {
     return;
   }
   init();
-  first();
   loopWrap();
   return;
 }
