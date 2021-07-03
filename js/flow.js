@@ -1,11 +1,8 @@
-const fps = 60;
+const fps = 30;
 
 function entry() {
   console.log("entry");
-  if (!isOpenCVLoaded) {
-    setTimeout(entry, 100);
-    return;
-  }
+  if (!isOpenCVLoaded) return;
   init();
   loopWrap();
   return;

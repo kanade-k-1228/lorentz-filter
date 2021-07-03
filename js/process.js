@@ -5,7 +5,7 @@ let imgs;
 
 function init() {
   // メモリ確保
-  cap = new cv.VideoCapture(camera); // ストリーム
+  cap = new cv.VideoCapture(camera);
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
   vslit = new cv.Rect(Math.floor(camera.width / 2), 0, 1, camera.height); // 縦長のスリット
@@ -16,6 +16,13 @@ function init() {
   // 初期値を代入
   cap.read(src);
   dst = src.clone();
+}
+
+// 時空間をミックス
+function lorentz() {
+  cap.read(src); // カメラ画像をキャプチャ
+  dst = src;
+  cv.imshow("canvasOutput", dst); // 画像出力
 }
 
 // 時間軸をx軸に変換
@@ -46,6 +53,3 @@ function resizeWidth(target, ratio) {
   cv.resize(target, target, size, 0, 0, cv.INTER_AREA);
   return;
 }
-
-// 時空間をミックス
-function lorentz() {}
