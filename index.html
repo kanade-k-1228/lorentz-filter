@@ -7,10 +7,14 @@
     <title>Lorentz Filter</title>
   </head>
   <body>
+    <button type="button" id="changeCamera">Change Camera</button>
     <video id="videoInput" controls autoplay></video>
+    <button type="button" id="start" onclick="entry();">Start</button>
     <canvas id="canvasOutput"></canvas>
-    <script src="process.js"></script>
-    <script src="interface.js"></script>
+    <script src="./js/camera.js"></script>
+    <script src="./js/loadOpenCV.js"></script>
+    <script src="./js/process.js"></script>
+    <script src="./js/flow.js"></script>
     <script async src="https://docs.opencv.org/3.4.0/opencv.js" onload="onOpenCvReady();"></script>
   </body>
 </html>
