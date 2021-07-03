@@ -10,35 +10,42 @@ function init() {
   dst = new cv.Mat(); // 出力画像
   vslit = new cv.Rect(0, 0, 1, camera.height); // 縦長のスリット
   hslit = new cv.Rect(0, 0, camera.width, 1); // 横長のスリット
-  vmask = new cv.Rect(0, 0, 1, camera.height); // 縦長の短冊
-  hmask = new cv.Rect(0, 0, camera.width, 1); // 横長の短冊
+  vmask = new cv.Rect(0, 0, 20, camera.height); // 縦長の短冊
+  hmask = new cv.Rect(0, 0, camera.width, 20); // 横長の短冊
   imgs = new cv.MatVector();
   // 初期値を代入
   cap.read(src);
-  dst = resizeKeepHeight(src, 0.2);
+  dst = src.clone();
 }
 
 // 時間軸をx軸に変換
 function t2x() {
   cap.read(src); // カメラ画像をキャプチャ
 
-  const tmp = new cv.MatVector();
-  const dstroi = new cv.Rect(1, 0, dst.size().width - 1, camera.height);
-  tmp.push_back(dst.roi(dstroi));
-  tmp.push_back(src.roi(vslit)); // 短冊状に切り取り，
-  cv.hconcat(tmp, dst); // 合成
-  tmp.delete();
+  const add = src.roi(vslit).clone();
+  resizeWidth(add, 3);
+  pushRightKeepWidth(dst, add);
+  add.delete();
 
-  cv.imshow("canvasOutput", resizeKeepHeight(dst, 5)); // 画像出力
+  cv.imshow("canvasOutput", dst); // 画像出力
+}
+
+// 幅を保って右側に追加
+function pushRightKeepWidth(target, add) {
+  const targetRoi = new cv.Rect(add.size().width, 0, target.size().width - add.size().width, target.size().height);
+  const vec = new cv.MatVector();
+  vec.push_back(target.roi(targetRoi));
+  vec.push_back(add);
+  cv.hconcat(vec, target);
+  return;
+}
+
+// 幅を伸縮
+function resizeWidth(target, ratio) {
+  const size = new cv.Size(Math.round(target.size().width * ratio), target.size().height);
+  cv.resize(target, target, size, 0, 0, cv.INTER_AREA);
+  return;
 }
 
 // 時空間をミックス
 function lorentz() {}
-
-function resizeKeepHeight(mat, ratio) {
-  const { width, height } = mat.size();
-  const ret = new cv.Mat();
-  const size = new cv.Size(Math.round(width * ratio), height);
-  cv.resize(mat, ret, size, 0, 0, cv.INTER_AREA);
-  return ret;
-}

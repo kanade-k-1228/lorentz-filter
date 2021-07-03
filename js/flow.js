@@ -1,4 +1,4 @@
-const fps = 30;
+const fps = 60;
 
 function entry() {
   if (!isOpenCVLoaded) {
