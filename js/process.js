@@ -5,11 +5,11 @@ let imgs;
 
 function init() {
   // メモリ確保
-  cap = new cv.VideoCapture(camera); // ストリーム
+  cap = new cv.VideoCapture(videoElement); // ストリーム
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
-  vslit = new cv.Rect(0, 0, 1, camera.height); // 縦長のスリット
-  hslit = new cv.Rect(0, 0, camera.width, 1); // 横長のスリット
+  vslit = new cv.Rect(Math.floor(camera.width / 2), 0, 1, camera.height); // 縦長のスリット
+  hslit = new cv.Rect(0, Math.floor(camera.height / 2), camera.width, 1); // 横長のスリット
   vmask = new cv.Rect(0, 0, 20, camera.height); // 縦長の短冊
   hmask = new cv.Rect(0, 0, camera.width, 20); // 横長の短冊
   imgs = new cv.MatVector();
