@@ -1,7 +1,6 @@
 const loop = t2x;
 
 let cap, src, dst, vslit, hslit;
-let imgs;
 
 function init() {
   // メモリ確保
@@ -10,22 +9,15 @@ function init() {
   dst = new cv.Mat(); // 出力画像
   vslit = new cv.Rect(Math.floor(camera.width / 2), 0, 1, camera.height); // 縦長のスリット
   hslit = new cv.Rect(0, Math.floor(camera.height / 2), camera.width, 1); // 横長のスリット
-  vmask = new cv.Rect(0, 0, 20, camera.height); // 縦長の短冊
-  hmask = new cv.Rect(0, 0, camera.width, 20); // 横長の短冊
-  imgs = new cv.MatVector();
+
   // 初期値を代入
   cap.read(src);
   dst = src.clone();
 }
 
-// 時空間をミックス
-function lorentz() {
-  cap.read(src); // カメラ画像をキャプチャ
-  dst = src;
-  cv.imshow("canvasOutput", dst); // 画像出力
-}
-
+// -----------------
 // 時間軸をx軸に変換
+// -----------------
 function t2x() {
   cap.read(src); // カメラ画像をキャプチャ
 
