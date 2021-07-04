@@ -7,9 +7,14 @@
     <title>Lorentz Filter</title>
   </head>
   <body>
+    <table>
+      <tr><td>VideoSource</td><td><select id="videoSource"></select></td></tr>
+      <tr><td>FPS</td>      <td><input id="fps"       type="number" value="30"></input></td></tr>
+      <tr><td>SlitCount</td><td><input id="slitCount" type="number" value="1000"></input></td></tr>
+      <tr><td>SlitWidth</td><td><input id="slitWidth" type="number" value="3"></input></td></tr>
+      <tr><td>Ratio</td>    <td><input id="ratio"     type="number" value="1"></input></td></tr>
+    </table>
     <div>
-      <label for="videoSource">Video source: </label>
-      <select id="videoSource"></select>
       <button type="button" id="start" onclick="entry();">Start</button>
     </div>
     <video autoplay muted playsinline id="cameraInput"></video>

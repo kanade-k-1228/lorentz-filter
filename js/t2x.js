@@ -1,18 +1,20 @@
 const loop = t2x;
 
-let cap, src, dst, vslit, hslit;
+let cap, src, dst, slit;
 
 function init() {
   // メモリ確保
   cap = new cv.VideoCapture(camera);
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
-  vslit = new cv.Rect(Math.floor(camera.width / 2), 0, 1, camera.height); // 縦長のスリット
-  hslit = new cv.Rect(0, Math.floor(camera.height / 2), camera.width, 1); // 横長のスリット
-
+  slit = new cv.Rect(Math.floor(camera.width / 2), 0, slitWidth, camera.height); // スリット
   // 初期値を代入
   cap.read(src);
-  dst = src.clone();
+  const tmp = new cv.MatVector();
+  for (let i = 0; i < slitCount; i++) {
+    tmp.push_back(src.roi(slit));
+  }
+  cv.hconcat(tmp, dst);
 }
 
 // -----------------
@@ -21,8 +23,8 @@ function init() {
 function t2x() {
   cap.read(src); // カメラ画像をキャプチャ
 
-  const add = src.roi(vslit).clone();
-  resizeWidth(add, 3);
+  const add = src.roi(slit).clone();
+  resizeWidth(add, slitWidth);
   pushRightKeepWidth(dst, add);
   add.delete();
 
