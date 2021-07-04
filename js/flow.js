@@ -1,12 +1,23 @@
-let fps, slitWidth, slitCount, ratio;
+let filter, fps, slitWidth, slitCount, ratio;
 let running = false;
+let init, loop;
 
 function entry() {
+  filter = document.getElementById("filter").value;
+  if (filter === "t2x") {
+    init = t2x_init;
+    loop = t2x;
+  } else if (filter === "lorentz") {
+    init = lorentz_init;
+    loop = lorentz;
+  } else {
+    return;
+  }
   fps = parseInt(document.getElementById("fps").value);
   slitCount = parseInt(document.getElementById("slitCount").value);
   slitWidth = parseInt(document.getElementById("slitWidth").value);
   ratio = parseInt(document.getElementById("ratio").value);
-  console.log(`Start fps:${fps}, slitCount:${slitCount}, slitWidth:${slitWidth}, ratio:${ratio}`);
+  console.log(`Start filter:${filter}, fps:${fps}, slitCount:${slitCount}, slitWidth:${slitWidth}, ratio:${ratio}`);
   if (!isOpenCVLoaded) return;
   running = true;
   init();

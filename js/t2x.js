@@ -1,37 +1,35 @@
-const loop = t2x;
+let t2x_cap, t2x_src, t2x_acc, t2x_out, t2x_slit;
 
-let cap, src, acc, out, slit;
-
-function init() {
+function t2x_init() {
   // メモリ確保
-  cap = new cv.VideoCapture(camera);
-  src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
-  acc = new cv.Mat(); // アキュムレータ
-  out = new cv.Mat(); // 出力画像
-  slit = new cv.Rect(Math.floor(camera.width / 2), 0, slitWidth, camera.height); // スリット
+  t2x_cap = new cv.VideoCapture(camera);
+  t2x_src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
+  t2x_acc = new cv.Mat(); // アキュムレータ
+  t2x_out = new cv.Mat(); // 出力画像
+  t2x_slit = new cv.Rect(Math.floor(camera.width / 2), 0, slitWidth, camera.height); // スリット
   // 初期値を代入
-  cap.read(src);
+  t2x_cap.read(t2x_src);
   const tmp = new cv.MatVector();
   for (let i = 0; i < slitCount; i++) {
-    tmp.push_back(src.roi(slit));
+    tmp.push_back(t2x_src.roi(t2x_slit));
   }
-  cv.hconcat(tmp, acc);
+  cv.hconcat(tmp, t2x_acc);
 }
 
 // -----------------
 // 時間軸をx軸に変換
 // -----------------
 function t2x() {
-  cap.read(src); // カメラ画像をキャプチャ
+  t2x_cap.read(t2x_src); // カメラ画像をキャプチャ
 
-  const add = src.roi(slit).clone();
-  pushRightKeepWidth(acc, add);
+  const add = t2x_src.roi(t2x_slit).clone();
+  pushRightKeepWidth(t2x_acc, add);
   add.delete();
 
-  const size = new cv.Size(Math.round(acc.size().width * ratio), acc.size().height);
-  cv.resize(acc, out, size, 0, 0, cv.INTER_AREA);
+  const size = new cv.Size(Math.round(t2x_acc.size().width * ratio), t2x_acc.size().height);
+  cv.resize(t2x_acc, t2x_out, size, 0, 0, cv.INTER_AREA);
 
-  cv.imshow("canvasOutput", out); // 画像出力
+  cv.imshow("canvasOutput", t2x_out); // 画像出力
 }
 
 // 幅を保って右側に追加
