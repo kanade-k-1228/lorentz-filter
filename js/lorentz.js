@@ -1,7 +1,9 @@
 const loop = lorentz;
 
+let division_count;
+let mask_width;
+
 // Cyclic
-const division_count = 40;
 let imgs = [];
 let pointer = 0;
 
@@ -11,13 +13,15 @@ let hmask = [];
 let matvec;
 
 function init() {
+  division_count = 60;
+  mask_width = Math.floor(camera.width / division_count);
+
   // メモリ確保
   cap = new cv.VideoCapture(camera);
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
 
   // マスク
-  const mask_width = Math.round(camera.width / division_count);
   for (let i = 0; i < division_count; i++) {
     const rect = new cv.Rect(mask_width * i, 0, mask_width, camera.height);
     vmask.push(rect);

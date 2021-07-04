@@ -11,6 +11,6 @@ function entry() {
 function loopWrap() {
   let startTime = Date.now();
   loop();
-  // console.log(Math.round(1000 / fps - (Date.now() - startTime)));
+  console.log(Math.round(1000 / fps - (Date.now() - startTime)));
   setTimeout(loopWrap, 1000 / fps - (Date.now() - startTime));
 }
