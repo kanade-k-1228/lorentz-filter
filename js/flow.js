@@ -44,6 +44,6 @@ function stop() {
 function save() {
   let link = document.createElement("a");
   link.href = document.getElementById("canvasOutput").toDataURL("image/jpeg");
-  link.download = "canvas.png";
+  link.download = Date.now();
   link.click();
 }
