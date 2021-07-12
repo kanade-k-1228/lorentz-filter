@@ -1,13 +1,12 @@
-let filter, fps, slitWidth, slitCount, ratio;
+let filter, fps, scanSpeed, slitCount;
 let running = false;
 
 // エントリポイント
 function entry() {
   fps = parseInt(document.getElementById("fps").value);
-  slitCount = parseInt(document.getElementById("slitCount").value);
-  slitWidth = parseInt(document.getElementById("slitWidth").value);
-  ratio = parseInt(document.getElementById("ratio").value);
-  console.log(`Start: Lorentz, fps:${fps}, slitCount:${slitCount}, slitWidth:${slitWidth}, ratio:${ratio}`);
+  scanSpeed = parseInt(document.getElementById("scanSpeed").value);
+  slitCount = Math.floor(camera.width / scanSpeed);
+  console.log(`Start: Lorentz, fps:${fps}, slitCount:${slitCount}, scanSpeed:${scanSpeed}, ${scanSpeed * slitCount}`);
   if (!isOpenCVLoaded) return;
   running = true;
   init();
@@ -47,8 +46,7 @@ let imgs = [];
 let pointer = 0;
 
 let cap, src, dst, size;
-let vmask = [];
-let hmask = [];
+let masks = [];
 let matvec;
 
 function init() {
@@ -56,11 +54,12 @@ function init() {
   cap = new cv.VideoCapture(camera);
   src = new cv.Mat(camera.height, camera.width, cv.CV_8UC4); // 入力画像
   dst = new cv.Mat(); // 出力画像
-  size = new cv.Size(Math.round(camera.width * ratio), camera.height); // 出力画像のサイズ
+  size = new cv.Size(camera.width, camera.height); // 出力画像のサイズ
   // マスク
+  masks = [];
   for (let i = 0; i < slitCount; i++) {
-    const rect = new cv.Rect(slitWidth * i, 0, slitWidth, camera.height);
-    vmask.push(rect);
+    const rect = new cv.Rect(scanSpeed * i, 0, scanSpeed, camera.height);
+    masks.push(rect);
   }
   // 初期値を代入
   cap.read(src);
@@ -78,12 +77,12 @@ function loop() {
 
   matvec = new cv.MatVector();
   for (let i = 0; i < slitCount; i++) {
-    matvec.push_back(imgs[(pointer - i + slitCount) % slitCount].roi(vmask[i]));
+    matvec.push_back(imgs[(pointer - i + slitCount) % slitCount].roi(masks[i]));
   }
   cv.hconcat(matvec, dst);
   matvec.delete();
 
-  cv.resize(dst, dst, size, 0, 0, cv.INTER_AREA);
+  // cv.resize(dst, dst, size, 0, 0, cv.INTER_AREA);
 
   cv.imshow("canvasOutput", dst); // 画像出力
   pointer = (pointer + 1) % slitCount;
