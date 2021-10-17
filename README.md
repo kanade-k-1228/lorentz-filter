@@ -1,9 +1,19 @@
 # lorentz-filter
 
-時間軸と空間軸を混合します
+動画の時間軸と空間軸を混合します
 
-- [デモ１（Lorentz Filter）](https://kanade-k-1228.github.io/lorentz-filter/Lorentz/)
-- [デモ２（Time to X-axis）](https://kanade-k-1228.github.io/lorentz-filter/t2x/)
+- [デモ１（Lorentz Filter）](./Lorentz/)
+- [デモ２（Time to X-axis）](./t2x/)
+
+## 説明
+
+動画は x,y,t の三次元空間と見ることができます．
+
+3 次元空間の座標変換をして新しい動画を作ります．
+
+[道路を撮った動画]()
+
+右向きに動く車が早く，左向きに動く車が遅く見えます．
 
 ## 参考
 
